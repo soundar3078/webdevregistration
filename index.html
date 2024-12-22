@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Registration Form</h2>
+        <form id="registrationForm">
+            <!-- First Name -->
+            <label for="first-name">First Name</label>
+            <input type="text" id="first-name" name="first-name" placeholder="Enter your first name" required>
+            <span id="first-name-error" class="error-message"></span>
+
+            <!-- Last Name -->
+            <label for="last-name">Last Name</label>
+            <input type="text" id="last-name" name="last-name" placeholder="Enter your last name" required>
+            <span id="last-name-error" class="error-message"></span>
+
+            <!-- Date of Birth -->
+            <label for="dob">Date of Birth</label>
+            <input type="date" id="dob" name="dob" required>
+            <span id="dob-error" class="error-message"></span>
+
+            <!-- Phone Number -->
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
+            <span id="phone-error" class="error-message"></span>
+
+            <!-- Email -->
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+            <span id="email-error" class="error-message"></span>
+
+            <!-- College -->
+            <label for="college">College</label>
+            <input type="text" id="college" name="college" placeholder="Enter your college" required>
+            <span id="college-error" class="error-message"></span>
+
+            <!-- Semester -->
+            <label for="semester">Semester</label>
+            <select id="semester" name="semester" required>
+                <option value="">Select Semester</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+            </select>
+            <span id="semester-error" class="error-message"></span>
+
+            <!-- Year -->
+            <label for="year">Year</label>
+            <select id="year" name="year" required>
+                <option value="">Select Year</option>
+                <option value="1st Year">1st Year</option>
+                <option value="2nd Year">2nd Year</option>
+                <option value="3rd Year">3rd Year</option>
+                <option value="4th Year">4th Year</option>
+            </select>
+            <span id="year-error" class="error-message"></span>
+
+            <!-- Gender -->
+            <label>Gender</label>
+            <div class="gender-container">
+                <label><input type="radio" name="gender" value="Male" required> Male</label>
+                <label><input type="radio" name="gender" value="Female"> Female</label>
+                <label><input type="radio" name="gender" value="Other"> Other</label>
+            </div>
+            <span id="gender-error" class="error-message"></span>
+
+            <!-- Submit Button -->
+            <button type="submit">Submit Registration</button>
+        </form>
+
+        <!-- Div to display the submitted data -->
+        <div id="confirmationMessage" class="confirmation-message"></div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Function to handle form submission and display the entered information
+            $('#registrationForm').on('submit', function(event) {
+                event.preventDefault();
+
+                // Clear previous error messages
+                $(".error-message").text("");
+
+                // Getting the form data
+                let firstName = $('#first-name').val();
+                let lastName = $('#last-name').val();
+                let dob = $('#dob').val();
+                let phone = $('#phone').val();
+                let email = $('#email').val();
+                let college = $('#college').val();
+                let semester = $('#semester').val();
+                let year = $('#year').val();
+                let gender = $('input[name="gender"]:checked').val();
+
+                let valid = true;
+
+                // Simple validation checks
+                if (!firstName) {
+                    $('#first-name-error').text("First name is required.");
+                    valid = false;
+                }
+
+                if (!lastName) {
+                    $('#last-name-error').text("Last name is required.");
+                    valid = false;
+                }
+
+                if (!dob) {
+                    $('#dob-error').text("Date of birth is required.");
+                    valid = false;
+                }
+
+                if (!phone || !/^(\+?\d{1,3}[- ]?)?\(?\d{1,4}\)?[- ]?\d{1,4}[- ]?\d{1,4}$/.test(phone)) {
+                    $('#phone-error').text("Please enter a valid phone number.");
+                    valid = false;
+                }
+
+                if (!email || !/\S+@\S+\.\S+/.test(email)) {
+                    $('#email-error').text("Please enter a valid email address.");
+                    valid = false;
+                }
+
+                if (!college) {
+                    $('#college-error').text("College name is required.");
+                    valid = false;
+                }
+
+                if (!semester) {
+                    $('#semester-error').text("Please select your semester.");
+                    valid = false;
+                }
+
+                if (!year) {
+                    $('#year-error').text("Please select your year.");
+                    valid = false;
+                }
+
+                if (!gender) {
+                    $('#gender-error').text("Please select your gender.");
+                    valid = false;
+                }
+
+                // If the form is valid, show the confirmation message
+                if (valid) {
+                    let confirmationMessage = `
+                        <h3>Registration Successful</h3>
+                        <p><strong>Name:</strong> ${firstName} ${lastName}</p>
+                        <p><strong>Date of Birth:</strong> ${dob}</p>
+                        <p><strong>Phone:</strong> ${phone}</p>
+                        <p><strong>Email:</strong> ${email}</p>
+                        <p><strong>College:</strong> ${college}</p>
+                        <p><strong>Semester:</strong> ${semester}</p>
+                        <p><strong>Year:</strong> ${year}</p>
+                        <p><strong>Gender:</strong> ${gender}</p>
+                    `;
+
+                    $('#confirmationMessage').html(confirmationMessage).fadeIn(500);
+                    $('#registrationForm')[0].reset(); // Reset form fields
+                }
+            });
+
+            // Optional: Add a floating label effect to inputs when focused
+            $('input, select').on('focus', function() {
+                $(this).addClass('focus');
+            }).on('blur', function() {
+                if ($(this).val() === '') {
+                    $(this).removeClass('focus');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
